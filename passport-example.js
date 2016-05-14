@@ -58,14 +58,14 @@ app.post('/login', bodyParser.urlencoded({ extended: false }), passport.authenti
 }));
 
 // Page for user settings
-app.use('/user/settings', mustBeAuthentificated, function (req, res) {
+app.get('/user/settings', mustBeAuthentificated, function (req, res) {
   res
     .status(200)
     .send('Совершенно секретная часть. Только для тебя, ' + req.user.username);
 });
 
 // User cabinet
-app.use('/user', mustBeAuthentificated, function (req, res) {
+app.get('/user', mustBeAuthentificated, function (req, res) {
   res
     .status(200)
     .send('Привет, ' + req.user.username);
