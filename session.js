@@ -1,20 +1,21 @@
-// Cookies and user session
+// Cookies и сессии пользователя
+
 var app = require('express')();
 var cookieParser = require('cookie-parser');
 var session = require('cookie-session');
 
-// Set middlewares
 app.use(cookieParser());
 app.use(session({
   keys: ['key'],
 }));
 
-// Set request handler
 app.get('/', function (req, res) {
-  var count = req.session.views || 0; // 0 it is a default value
+  req.sessionOptions.maxAge = 5000;
+  
+  var count = req.session.views || 0; // 0 по-умолчанию
 
-  req.session.views = ++count; // increment value 
-                               // and save it in user session
+  req.session.views = ++count; // увеличиваем значение на 1
+                               // и сохраняем в сессию
   res.end(count + ' показ(ов)');
 });
 

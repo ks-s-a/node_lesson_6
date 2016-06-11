@@ -1,11 +1,11 @@
-// Cookies with module
+// Модуль cookies
 
 var http = require('http');
 var Cookies = require('cookies');
 
 http
   .createServer(function(request, response) {
-    // Get cookies from request
+    // Получение cookies из запроса
     var cookies = new Cookies(request, response);
 
     var language = cookies.get('language');
@@ -14,7 +14,7 @@ http
     var platform = cookies.get('platform');
     console.log('platform is: ' , platform);
 
-    // Set cookies
+    // Установка cookies
     cookies.set('language', 'javascript');
     cookies.set('platform', 'NodeJS');
 

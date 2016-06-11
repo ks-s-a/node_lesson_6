@@ -1,13 +1,13 @@
-// Cookies via http module
+// Cookie через http модуль
 
 var http = require('http');
 
 http
   .createServer(function(request, response) {
-    // Show me your cookies
-    console.log(request.headers['cookie']);
+    // Покажи мне свои cookies
+    console.log(request.headers.cookie);
 
-    // Write http headers
+    // Пишем http-заголовки
     response.writeHead(200, {
       'Set-Cookie': ["type=ninja", "language=javascript"],
       'Content-Type': 'text/plain',

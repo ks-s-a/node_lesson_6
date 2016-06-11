@@ -1,4 +1,4 @@
-// User authtorization with PassportJS
+// Авторизация пользователя с PassportJS
 
 var app = require('express')();
 var bodyParser = require('body-parser');
@@ -7,38 +7,38 @@ var session = require('cookie-session');
 var passport = require('passport');
 var LocalStratagy = require('passport-local');
 
-// Set middlewares
 app.use(cookieParser()); // req.cookies
 app.use(session({keys: ['key']})); // req.session
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Set authtorization stratagy
+// Настройка стратегии авторизации
 passport.use(new LocalStratagy(function (username, pass, done) {
+  // Проверяем авторизационные данные
   if (username !== 'admin' || pass !== 'admin')
-    return done(null, false)
+    return done(null, false);
 
   done(null, {username: username});
 }));
 
-// Method for saving user in session
+// Метод сохранения данных пользователя в сессии
 passport.serializeUser(function (user, done) {
   done(null, user.username);
 });
 
-// Method for restore user from session
+// Метод извлечения данных пользователя из сессии
 passport.deserializeUser(function (username, done) {
   done(null, {username: username});
 });
 
-// Main page for everyone
+// Главная страница для всех
 app.get('/', function (req, res) {
   res
     .status(200)
     .send('Это главная страница!');
 });
 
-// Login form
+// Страница логина
 app.get('/login', function (req, res) {
   res
     .status(200)
@@ -51,41 +51,40 @@ app.get('/login', function (req, res) {
       '</form>');
 });
 
-// Login request handler
+// Обработчик запроса на авторизацию
 app.post('/login', bodyParser.urlencoded({ extended: false }), passport.authenticate('local', {
   successRedirect: '/user',
   failureRedirect: '/login'
 }));
 
-// Page for user settings
+// Страница настроек пользователя (нужна авторизация)
 app.get('/user/settings', mustBeAuthentificated, function (req, res) {
   res
     .status(200)
     .send('Совершенно секретная часть. Только для тебя, ' + req.user.username);
 });
 
-// User cabinet
+// Кабинет пользователя (нужна авторизация)
 app.get('/user', mustBeAuthentificated, function (req, res) {
   res
     .status(200)
     .send('Привет, ' + req.user.username);
 });
 
-// Logout page
+// Страница выхода
 app.get('/logout', function(req, res) {
-  req.logout(); // execute passportJS logout
-  res.redirect('/'); // go to main page
+  req.logout(); // выполняем выход через passportJS
+  res.redirect('/'); // переход на главную
 });
 
-// Middleware for login checking
+// Метод для проверки пользователя
 function mustBeAuthentificated (req, res, next) {
   if (req.isAuthenticated())
     return next();
 
-  res.redirect('/login'); // go to login page
+  res.redirect('/login'); // переход на страницу логина
 }
 
 app.listen(8000, function () {
   console.log('The application was launched on 8000 port!');
 });
-
