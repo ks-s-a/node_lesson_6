@@ -10,6 +10,8 @@ app.use(session({
 }));
 
 app.get('/', function (req, res) {
+  // Доступ к настройкам кук можно
+  // получить через sessionOptions
   req.sessionOptions.maxAge = 5000;
   
   var count = req.session.views || 0; // 0 по-умолчанию

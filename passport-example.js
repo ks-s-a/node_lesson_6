@@ -15,10 +15,10 @@ app.use(passport.session());
 // Настройка стратегии авторизации
 passport.use(new LocalStratagy(function (username, pass, done) {
   // Проверяем авторизационные данные
-  if (username !== 'admin' || pass !== 'admin')
-    return done(null, false);
+  if (username === 'admin' && pass === 'admin')
+    return done(null, {username: username});
 
-  done(null, {username: username});
+  done(null, false);
 }));
 
 // Метод сохранения данных пользователя в сессии
